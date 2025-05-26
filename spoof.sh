@@ -1,10 +1,10 @@
 #!/bin/sh
 
 # Path to module and JSON files
-MODDIR=/data/adb/modules/playintegrityfix
+MODDIR=/data/adb
 PIF_PATH="$MODDIR/pif.json"
 PIF_FORK_PATH="$MODDIR/custom.pif.json"
-D="/data/adb/Integrity-Box"
+D="$MODDIR/Integrity-Box"
 L="$D/Integrity-Box.log"
 
 # meow meow 
@@ -13,32 +13,33 @@ MEOW() {
     sleep 0.5
 }
 
-# Logging Function
+# Logger
 log() { echo -e "$1" | tee -a "$L"; }
 
-# Function to create backup
+# Function to create backup of the fingerprint
 create_backup() {
     local json_file=$1
     local backup_file="${json_file}.bak"
     
     cp "$json_file" "$backup_file"
-    log "🌟 Backup created"
+    log "- Backup created 🌟"
 }
 
-# Function to restore backup
+# Function to restore the backup of the fingerprint
 restore_backup() {
     local json_file=$1
     local backup_file="${json_file}.bak"
 
     if [ -f "$backup_file" ]; then
         cp "$backup_file" "$json_file"
-        log "🌟 Backup restored"
+        log "- Backup restored 🌟"
+        MEOW "spoofVendingSdk disabled"
     else
         log "🍳 Skipped"
     fi
 }
 
-# Function to check and update fingerprint
+# Function to check and update the  fingerprint
 update_json() {
     local json_file=$1
     local spoof_value=$2
@@ -51,12 +52,10 @@ update_json() {
     fi
 
     if [ "$spoof_value" -eq 0 ]; then
-        # Remove spoofVendingSdk entry when value is 0
         sed -i '/"spoofVendingSdk":/d' "$json_file"
         sed -i '/\/\/ This key is used to spoof Vending SDK for compatibility purposes./d' "$json_file"
         MEOW "spoofVendingSdk removed from $json_file"
     else
-        # If the value is not 0, update the spoofVendingSdk entry
         if grep -q '"spoofVendingSdk":' "$json_file"; then
             current_value=$(grep '"spoofVendingSdk":' "$json_file" | awk -F': ' '{print $2}' | tr -d ',')
 
@@ -79,22 +78,22 @@ update_json() {
     fi
 }
 
-# Display Options
+# Preview 
 log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 log "   [➕]  Enable spoofVendingSdk"
 log "   [➖]  Disable spoofVendingSdk"
-log "   [🔴]  Cancel and exit"
+log "   [🔴]  Cancel"
 log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 log " "
-
-# Choose the fp file 
+MEOW " Vol+ Enable / Vol- Disable"
+# Choose the fingeprint (check if custom.pif.json exists, otherwise use pif.json)
 if [ -f "$PIF_FORK_PATH" ]; then
     json_file=$PIF_FORK_PATH
 else
     json_file=$PIF_PATH
 fi
 
-# Key press handling 
+# Key press handling
 key_handler() {
     local result
 
@@ -120,11 +119,11 @@ key_handler() {
 key_handler
 spoofVendingSdk_value=$?
 
-# If Volume Down is pressed, restore the backup
+# If Volume Down is pressed (spoof_value is 0), restore the backup
 if [ "$spoofVendingSdk_value" -eq 0 ]; then
     restore_backup "$json_file"
 else
-    # Update the fp with the selected value
+    # Update thefingerprint with the selected value
     update_json "$json_file" $spoofVendingSdk_value
 fi
 exit 0

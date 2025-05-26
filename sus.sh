@@ -26,12 +26,12 @@ echo " " >> "$L"
 
 # Check if the output file is writable
 if [ ! -w "$O" ]; then
-    log "❌ $O is not writable. Please check file permissions."
+    log "- $O is not writable. Please check file permissions."
     exit 1
 fi
 
 # Log the start of the process
-log "🙏 Adding necessary paths to sus list"
+log "- Adding necessary paths to sus list"
 log " "
 > "$O"
 
@@ -43,26 +43,24 @@ for path in \
     "/vendor/bin/install-recovery.sh" \
     "/system/bin/install-recovery.sh"; do
     echo "$path" >> "$O"
-    log "✅ Path added to $path"
+    log "- Path added: $path"
 done
 
+log "- saved to sus list"
+log " "
+
 # Prepare for scanning
-log "🔍 Scanning system for LineageOS/Crdroid traces..."
+log "- Scanning system for Custom ROM detection.."
 
 # Search for traces in the specified directories
 for dir in /system /product /data /vendor /etc /root; do
-    log "📂 Searching in: $dir..."
-    find "$dir" -type f 2>/dev/null | grep -i -E "lineageos|crdroid" >> "$O"
+    log "- Searching in: $dir... "
+    find "$dir" -type f 2>/dev/null | grep -i -E "lineageos|crdroid|gapps|evolution|magisk" >> "$O"
 done
 
-# Set appropriate permissions for the output file
 chmod 644 "$O"
-
-# Log the completion of the scan
-log "✅ Scan complete. & saved to sus list"
+log "- Scan complete. & saved to sus list "
 
 MEOW "Make it SUS🥷"
-echo " "
-log " ✅ Done"
 log " "
 exit 0

@@ -9,13 +9,18 @@ log() {
     echo -e "$1" | tee -a "$L"
 }
 
+MEOW() {
+    am start -a android.intent.action.MAIN -e mona "$@" -n meow.helper/.MainActivity &>/dev/null
+    sleep 0.5
+}
+
 # Start logging
 echo -e "$Q" >> "$L"
-echo -e " 📌 INTEGRITY-BOX RISKY APPS DETECTION | $TIME " >> "$L"
+echo -e " - INTEGRITY-BOX RISKY APPS DETECTION | $TIME " >> "$L"
 echo -e "$Q\n" >> "$L"
 
-### Risky Apps Detection ###
-log "🔹 Risky Apps Detection"
+# Risky Apps Detection
+log "- Risky Apps Detection"
 RISKY_APPS="com.rifsxd.ksunext:KernelSU Next
 me.weishu.kernelsu:KernelSU
 com.google.android.hmal:Hide_My_Applist
@@ -55,8 +60,9 @@ else
     log "   └─ ✅ Not Found"
 fi
 
-log "✅ Detection Complete!\n"
+log "- Detection Complete!\n"
 log " "
 log "🪵 TIP: Use H.M.A to hide them"
 log " "
 echo -e "$R" >> "$L"
+MEOW "Log saved to $L"

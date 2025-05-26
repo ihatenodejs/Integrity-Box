@@ -1,93 +1,111 @@
 #!/system/bin/sh
 
-# Paths
-LOG="/data/adb/Integrity-Box"
-LOGFILE="$LOG/Integrity-Box.log"
-TARGET_DIR="/data/adb/tricky_store"
-FILE_PATH="$TARGET_DIR/security_patch.txt"
-FILE_CONTENT="all=2025-02-02"
+SCRIPT_DIR="/data/adb/modules/Integrity-Box"
+TMP_KEY="/dev/key_tmp"
 
-# Ensure directories exist
-mkdir -p "$LOG"
-mkdir -p "$TARGET_DIR"
+MENU="
+Add All apps in Target list:systemuser.sh
+Add User app only in Target list:user.sh
+Spoof TrickyStore patch:patch.sh
+Set AOSP keybox:aosp.sh
+Set Valid keybox (if AOSP):keybox.sh
+Set Custom Fingerprint:pif.sh
+Kill GMS process:kill.sh
+Spoof SDK:spoof.sh
+Update SusFS Config:sus.sh
+Enable GMS Spoofing prop:setprop.sh
+Disable GMS Spoofing prop:resetprop.sh
+Abnormal Detection:abnormal.sh
+Flagged Apps Detection:app.sh
+Props Detection:prop.sh
+FIX Device not Certified:vending.sh
+Help Group:meowverse.sh
+Telegram Channel:meowdump.sh
+Report a problem:issue.sh
+Module Info:info.sh
+"
 
-# Logging function
-log() { echo -e "$1" | tee -a "$LOGFILE"; }
+MEOW() {
+  am start -a android.intent.action.MAIN -e mona "$@" -n meow.helper/.MainActivity &>/dev/null
+  sleep 0.5
+}
 
-# MeowMeow
-MEOW() { am start -a android.intent.action.MAIN -e mona "$@" -n meow.helper/.MainActivity >/dev/null 2>&1; sleep 0.5; }
+draw_box() {
+  echo " "
+  echo "╔══════════════════════════╗"
+  while IFS= read -r line; do
+    printf "║ %-28s ║\n" "$line"
+  done <<EOF
+$1
+EOF
+  echo "╚══════════════════════════╝"
+  echo " "
+}
 
-# Function to Detect Key Press
-CheckKey() {
-  while true; do
-    key=$(getevent -qlc 1 | awk '/KEY_/ {print $3; exit}')
-    case $key in
-      KEY_VOLUMEUP|KEY_VOLUMEDOWN|KEY_POWER) echo "$key"; return ;;
+print_menu() {
+  printf "\033c"  # Clear screen and reset terminal
+  draw_box "     Integrity-Box Menu "
+  echo "- Use Volume Down to navigate"
+  echo "+ Use Volume Up to execute"
+  echo "• Press Power to cancel"
+  echo " "
+  i=1
+  while IFS= read -r line; do
+    LABEL=$(echo "$line" | cut -d: -f1)
+    [ "$i" -eq "$INDEX" ] && echo ">> $LABEL" || echo "   $LABEL"
+    i=$((i + 1))
+  done < /dev/tmp_menu
+  echo " "
+}
+
+# Function to get key press
+wait_for_key() {
+  while :; do
+    keyevent=$(getevent -qlc 1 2>/dev/null | grep "KEY_" | head -n 1)
+    case "$keyevent" in
+      *KEY_VOLUMEUP*) echo "UP"; return ;;
+      *KEY_VOLUMEDOWN*) echo "DOWN"; return ;;
+      *KEY_POWER*) echo "POWER"; return ;;
     esac
-    sleep 0.1
   done
 }
 
-# Select App Type
-log "🎯 Choose Target Apps"
-log "\n📢 Select target apps:"
-log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-log "   [➕]  All apps (System + User)"
-log "   [➖]  Installed apps only"
-log "   [🔴]  Skip this step"
-log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-log " "
+# Setup Menu
+echo "$MENU" | sed '/^$/d' > /dev/tmp_menu
+TOTAL=$(wc -l < /dev/tmp_menu)
+INDEX=1
 
-case $(CheckKey) in
-  KEY_VOLUMEUP) 
-    log "✅ Selected: All apps"
-    MEOW "Adding ALL APPS into 🎯 Target list"
-    /bin/sh /data/adb/modules/Integrity-Box/systemuser.sh
-    ;;
-  KEY_VOLUMEDOWN) 
-    log "✅ Selected: Installed apps only"
-    MEOW "Adding only USER APPS into 🎯 Target list"
-    /bin/sh /data/adb/modules/Integrity-Box/user.sh
-    ;;
-  KEY_POWER) 
-    log "⏭️ Skipping app selection..."
-    MEOW "⏭️ Skipped Step 1"
-    ;;
-esac
+print_menu
 
-sleep 1
+# Main Interaction Loop
+while :; do
+  key=$(wait_for_key)
+  case "$key" in
+    UP)
+      SELECTED=$(sed -n "${INDEX}p" /dev/tmp_menu)
+      LABEL=$(echo "$SELECTED" | cut -d: -f1)
+      SCRIPT=$(echo "$SELECTED" | cut -d: -f2)
+      sh "$SCRIPT_DIR/$SCRIPT"
+      MEOW "Done: $LABEL"
+      echo "- Done."
+      break
+      ;;
+    DOWN)
+      INDEX=$((INDEX + 1))
+      [ "$INDEX" -gt "$TOTAL" ] && INDEX=1
+      SELECTED=$(sed -n "${INDEX}p" /dev/tmp_menu)
+      LABEL=$(echo "$SELECTED" | cut -d: -f1)
+      MEOW "$LABEL"
+      print_menu
+      ;;
+    POWER)
+      MEOW "Cancelled"
+      echo " "
+      echo "- Cancelled by user."
+      break
+      ;;
+  esac
+done
 
-#: Security Patch Spoofing
-log "For A13+ checks only"
-log "\n📢 Security Patch Hack Options:"
-log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-log "   [➕]  Spoof security patch"
-log "   [➖]  Remove spoofed patch"
-log "   [🔴]  Cancel operation"
-log "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-log " "
-log "(Apply only if you were not able to pass A13+ checks)"
-log " "
-log "This is for old devices only"
-log "You can skip & update it later"
-log "using action button"
-log " "
-
-case $(CheckKey) in
-  KEY_VOLUMEUP) 
-    echo "$FILE_CONTENT" > "$FILE_PATH"
-    log "✅ Security patch spoofed successfully!"
-    MEOW "✅ Spoof applied!"
-    ;;
-  KEY_VOLUMEDOWN) 
-    rm -f "$FILE_PATH"
-    log "🗑️ Spoof removed!"
-    MEOW "🗑️ File removed!"
-    ;;
-  KEY_POWER) 
-    log "❌ Operation canceled!"
-    MEOW "❌ Canceled!"
-    exit 1 ;;
-esac
-
-log " "
+rm -f /dev/tmp_menu
+exit 0
