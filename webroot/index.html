@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Integrity-Box</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="title-bar">
+      <div>
+        <div id="module-name" class="title">Integrity-Box</div>
+        <div class="subtitle">Made with 💖 by Mona</div>
+      </div>
+      <div class="lang-select">
+        <select id="lang-dropdown">
+          <option value="en">🇬🇧 English</option>
+          <option value="id">🇮🇩 Indonesian</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="hi">🇮🇳 Tamil</option>
+          <option value="te">🇮🇳 Telugu</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="bn">🇧🇩 Bengali</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+      </div>
+      <label class="theme-switch">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <main class="button-grid">
+      <button class="btn" data-script="systemuser.sh">Target All Apps</button>
+      <button class="btn" data-script="user.sh">Target User Apps</button>
+      <button class="btn" data-script="keybox.sh">Set Valid Keybox</button>
+      <button class="btn" data-script="aosp.sh">Set AOSP Keybox</button>
+      <button class="btn" data-script="pif.sh">Set Custom Fingerprint</button>
+      <button class="btn" data-script="kill.sh">Kill GMS Process</button>
+      <button class="btn" data-script="spoof.sh">Spoof PIF SDK</button>
+      <button class="btn" data-script="patch.sh">Spoof Tricky Patch</button>
+      <button class="btn" data-script="sus.sh">Update SusFS Config</button>
+      <button class="btn" data-script="banned.sh">Banned Keybox List</button>
+      <button class="btn" data-script="setprop.sh">Disable GMS Spoofing</button>
+      <button class="btn" data-script="resetprop.sh">Enable GMS Spoofing</button>
+      <button class="btn" data-script="vending.sh">FIX Device not Certified</button>
+      <button class="btn" data-script="abnormal.sh">Abnormal Detection</button>
+      <button class="btn" data-script="app.sh">Flagged Apps</button>
+      <button class="btn" data-script="prop.sh">Props Detection</button>
+      <button class="btn" data-script="info.sh">Module Info</button>
+      <button class="btn" data-script="issue.sh">Report a Problem</button>
+      <button class="btn" data-script="meowverse.sh">Help Group</button>
+      <button class="btn" data-script="meowdump.sh">Update Channel</button>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
