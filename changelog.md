@@ -1,5 +1,12 @@
-# Integrity-Box ( v1.0 )
-- Release Date: 05/03/2025
+# Integrity-Box ( v3 )
+- Release Date: 26/05/2025
   
 > What's new?
-- Updated keybox
+- Signed meow assistant with private key
+- Dropped unnecessary openssl dependencies
+- Improved keybox encryption
+- Shipped with custom fingerprint
+- Improved installation script
+- Improved WebUI
+- Fixed keybox download error on some private DNS
+- Added translations into 13 languages! (Keep in mind that the translations are done by Google Translate, so they might not be perfect)
