@@ -1,0 +1,149 @@
+@font-face {
+  font-family: 'Mona';
+  src: url('mona.ttf') format('truetype');
+}
+
+:root {
+  --bg: #faf7ff;
+  --fg: #1a1a1a;
+  --accent: #7e57c2;
+  --btn-bg: #f3effa;
+  --btn-hover: #e6dbf5;
+}
+
+:root[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+.dark {
+  --bg: #121212;
+  --fg: #1a1a1a;
+  --accent: #f5d491;
+  --btn-bg: #f5d491;
+  --btn-hover: #d4af37;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Mona', monospace;
+  transition: background 0.3s, color 0.3s;
+}
+
+.container {
+  max-width: 820px;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #4cd964;
+}
+
+input:checked + .slider::before {
+  transform: translateX(18px);
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.btn {
+  background: var(--btn-bg);
+  border: 2px solid var(--accent);
+  color: var(--fg);
+  font-family: 'Mona', monospace;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s;
+}
+
+.btn:hover {
+  background: var(--btn-hover);
+  transform: scale(1.03);
+}
+.lang-select {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#lang-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+#lang-dropdown {
+  font-family: 'Mona', monospace;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+:root[data-theme='dark'] footer { color: #ffffff; }
+:root[data-theme='dark'] footer { color: #ffffff !important; }
