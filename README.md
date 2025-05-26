@@ -53,7 +53,7 @@
 - Facing Bootloop? `disable`[Enable log watchlog](https://raw.githubusercontent.com/MeowDump/Integrity-Box/main/DUMP/lsposed.png)`toggle` from lsposed settings
 - [Shamiko](https://t.me/LSPosed/292) does not work with magisk delta (kitsune mask)
 - [Shamiko](https://t.me/LSPosed/292) only works with [Zygisk Next](https://github.com/Dr-TSNG/ZygiskNext/releases)
-- Hide root properly if play integrity isn't passing for you. If you are suing a custom rom, make sure you have disabled inbuilt gms spoofing. How to disable it? Well it depends on what rom you're using. Join your rom help group & ask `how to disable it` there.
+- Hide root properly if play integrity isn't passing for you. If you are using a custom rom, make sure you have disabled inbuilt gms spoofing. `How to disable it?` Well it depends on what rom you're using. Join your rom help group & ask `how to disable it` there.
 - Switch to [Magisk Alpha](https://t.me/magiskalpha/683) if you're having integrity issue with official magisk.
 </details>
 <details>
