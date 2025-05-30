@@ -1,3 +1,7 @@
+# [HOTFIX] ( v4.1 )
+- If you’re experiencing issues with popup messages, kindly update to v4.1, else stay at v4 
+
+
 # Integrity-Box ( v4 )
 > Release Date: 30/05/2025
   
